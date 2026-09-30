@@ -17,8 +17,8 @@ now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
 print(f"{now} USD/CNY = {rate}")
 
-os.makedirs("data", exist_ok=True)
-csv_path = "data/exchange_rate.csv"
+os.makedirs("docs/data", exist_ok=True)
+csv_path = "docs/data/exchange_rate.csv"
 file_exists = os.path.isfile(csv_path)
 
 with open(csv_path, "a", newline="", encoding="utf-8") as f:
