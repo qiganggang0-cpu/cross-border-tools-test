@@ -4,6 +4,9 @@ import os
 import urllib.request
 from datetime import datetime, timezone
 
+api_key = os.environ.get("DEMO_API_KEY", "未设置")
+print(f"读取到的 API Key: {api_key[:8]}...")
+
 url = "https://open.er-api.com/v6/latest/USD"
 
 with urllib.request.urlopen(url, timeout=10) as resp:
