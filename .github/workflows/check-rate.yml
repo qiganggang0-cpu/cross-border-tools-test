@@ -18,6 +18,8 @@ jobs:
           python-version: '3.11'
       - name: Run script
         run: python scripts/check_rate.py
+        env:
+          DEMO_API_KEY: ${{ secrets.DEMO_API_KEY }}  
       - name: Commit CSV
         run: |
           git config user.name "github-actions[bot]"
