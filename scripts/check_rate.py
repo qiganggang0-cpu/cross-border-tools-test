@@ -1,4 +1,6 @@
+import csv
 import json
+import os
 import urllib.request
 from datetime import datetime, timezone
 
@@ -11,3 +13,13 @@ rate = data["rates"]["CNY"]
 now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
 print(f"{now} USD/CNY = {rate}")
+
+os.makedirs("data", exist_ok=True)
+csv_path = "data/exchange_rate.csv"
+file_exists = os.path.isfile(csv_path)
+
+with open(csv_path, "a", newline="", encoding="utf-8") as f:
+    writer = csv.writer(f)
+    if not file_exists:
+        writer.writerow(["time_utc", "base", "quote", "rate"])
+    writer.writerow([now, "USD", "CNY", rate])
