@@ -20,8 +20,8 @@ with urllib.request.urlopen(req, timeout=15) as resp:
 products = data["products"]
 now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
-os.makedirs("data", exist_ok=True)
-csv_path = "data/product_prices.csv"
+os.makedirs("docs/data", exist_ok=True)
+csv_path = "docs/data/product_prices.csv"
 file_exists = os.path.isfile(csv_path)
 
 with open(csv_path, "a", newline="", encoding="utf-8") as f:
