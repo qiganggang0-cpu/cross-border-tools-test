@@ -4,11 +4,20 @@ import os
 import urllib.request
 from datetime import datetime, timezone
 
-url = "https://fakestoreapi.com/products"
+url = "https://dummyjson.com/products?limit=100"
 
-with urllib.request.urlopen(url, timeout=10) as resp:
-    products = json.loads(resp.read().decode())
+req = urllib.request.Request(
+    url,
+    headers={
+        "User-Agent": "Mozilla/5.0 (compatible; cross-border-tools/1.0)",
+        "Accept": "application/json",
+    },
+)
 
+with urllib.request.urlopen(req, timeout=15) as resp:
+    data = json.loads(resp.read().decode())
+
+products = data["products"]
 now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
 os.makedirs("data", exist_ok=True)
@@ -20,7 +29,7 @@ with open(csv_path, "a", newline="", encoding="utf-8") as f:
     if not file_exists:
         writer.writerow([
             "time_utc", "product_id", "title", "price",
-            "category", "rating_rate", "rating_count"
+            "category", "rating_rate", "stock"
         ])
     for p in products:
         writer.writerow([
@@ -29,8 +38,8 @@ with open(csv_path, "a", newline="", encoding="utf-8") as f:
             p["title"],
             p["price"],
             p["category"],
-            p["rating"]["rate"],
-            p["rating"]["count"],
+            p.get("rating", ""),
+            p.get("stock", ""),
         ])
 
 print(f"{now} 抓取到 {len(products)} 个商品，已写入 {csv_path}")
