@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: '0 0 * * *'
 
+permissions:
+  contents: write
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -15,3 +18,14 @@ jobs:
           python-version: '3.11'
       - name: Run script
         run: python scripts/check_rate.py
+      - name: Commit CSV
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/exchange_rate.csv
+          if git diff --cached --quiet; then
+            echo "没有新变化，跳过提交"
+          else
+            git commit -m "更新汇率记录 $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+            git push
+          fi
